@@ -373,12 +373,22 @@ const crypto = require('crypto');
 
 const app = express();
 
+// app.use(cors({
+//     origin: ['http://localhost:3000', 'http://localhost:5173', 'https://your-production-domain.com'],
+//     methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+//     allowedHeaders: 'X-Requested-With, Content-Type',
+//     credentials: true
+// }));
+
+const cors = require('cors');
+
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://your-production-domain.com'],
-    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-    allowedHeaders: 'X-Requested-With, Content-Type',
-    credentials: true
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://trendify-react.onrender.com', 'https://your-production-domain.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true 
 }));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
