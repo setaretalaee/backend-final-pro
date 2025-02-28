@@ -458,14 +458,10 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        // بررسی داده‌ها
-        console.log('Email:', email);
-
         const user = await sql`
             SELECT user_id, email, password, salt FROM people WHERE email = ${email};
         `;
-
-        console.log('User from DB:', user);
+        console.log('User retrieved:', user);
 
         if (user.length === 0) {
             return res.status(404).json({ message: 'User not found' });
