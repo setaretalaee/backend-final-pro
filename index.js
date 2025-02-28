@@ -350,30 +350,6 @@ app.use(express.urlencoded({ extended: true }));
 const DATABASE_URL = 'postgresql://neondb_owner:npg_Hd5x6ZilDrwo@ep-cool-scene-a8fsiw9y-pooler.eastus2.azure.neon.tech/neondb?sslmode=require';
 const sql = neon(DATABASE_URL);
 
-// app.post('/People', async (req, res) => {
-//     const { email, password } = req.body;
-
-//     if (!email || !password) {
-//         return res.status(400).json({ message: 'Email and password are required' });
-//     }
-
-//     try {
-//         const salt = crypto.randomBytes(16).toString('hex');
-//         const hash = crypto.createHmac('sha256', salt).update(password).digest('hex');  
-
-//         const result = await sql`
-//             INSERT INTO people (email, password, salt) 
-//             VALUES (${email}, ${hash}, ${salt})
-//             RETURNING *;
-//         `;
-//         console.log('User added to database:', result[0]);
-//         res.status(201).json({ message: 'User registered successfully' });
-//     } catch (error) {
-//         console.error('Error inserting data into database:', error);
-//         res.status(500).json({ message: 'Registration failed', error: error });
-//     }
-// });
-
 app.post('/People', async (req, res) => {
     const { email, password } = req.body;
 
@@ -394,9 +370,6 @@ app.post('/People', async (req, res) => {
         res.status(500).json({ message: 'Registration failed', error: error });
     }
 });
-
-
-
 
 app.post('/submitOrder', async (req, res) => {
     const { userId, productIds } = req.body;
@@ -470,18 +443,6 @@ app.get('/ShoesWomen', async (req, res) => {
         res.status(500).send('Error fetching data from database');
     }
 });
-
-// app.get('/people', async (req, res) => {
-//     try {
-//         console.log('Fetching data from database...');
-//         const people = await sql`SELECT * FROM people`; 
-//         console.log('Data fetched:', people); 
-//         res.send(people); 
-//     } catch (error) {
-//         console.error('Database error:', error);
-//         res.status(500).send('Error fetching data from database');
-//     }
-// });
 
 
 
@@ -570,6 +531,29 @@ app.post('/AdminHats', async (req, res) => {
     }
 });
 
+// app.post('/adminShoes', async (req, res) => {
+//     const { name, price, size, color, gender } = req.body;
+
+//     if (!name ) {
+//         return res.status(400).json({ message: 'All fields are required for Shoes' });
+//     }
+
+//     try {
+//         const result = await sql`
+//             INSERT INTO shoes (name, price, size, color, gender)
+//             VALUES (${name}, ${price}, ${size}, ${color}, ${gender})
+//             RETURNING *;
+//         `;
+//         console.log('Shoe added to database:', result[0]);
+//         res.status(201).json({ message: 'Shoe added successfully' });
+//     } catch (error) {
+//         console.error('Error inserting data into database:', error);
+//         res.status(500).json({ message: 'Failed to add shoe', error: error });
+//     }
+// });
+
+
+
 app.post('/adminShoes', async (req, res) => {
     const { name, price, size, color, gender } = req.body;
 
@@ -591,6 +575,28 @@ app.post('/adminShoes', async (req, res) => {
     }
 });
 
+// app.post('/adminDress', async (req, res) => {
+//     const { name, price, size, color, gender } = req.body;
+
+//     if (!name || !price || !size || !color || !gender) {
+//         return res.status(400).json({ message: 'All fields are required for Dresses' });
+//     }
+
+//     try {
+//         const result = await sql`
+//             INSERT INTO dresses (name, price, size, color, gender)
+//             VALUES (${name}, ${price}, ${size}, ${color}, ${gender})
+//             RETURNING *;
+//         `;
+//         console.log('Dress added to database:', result[0]);
+//         res.status(201).json({ message: 'Dress added successfully' });
+//     } catch (error) {
+//         console.error('Error inserting data into database:', error);
+//         res.status(500).json({ message: 'Failed to add dress', error: error });
+//     }
+// });
+
+
 app.post('/adminDress', async (req, res) => {
     const { name, price, size, color, gender } = req.body;
 
@@ -611,10 +617,6 @@ app.post('/adminDress', async (req, res) => {
         res.status(500).json({ message: 'Failed to add dress', error: error });
     }
 });
-
-
-
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
