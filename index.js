@@ -107,52 +107,6 @@
 
 
 
-//   // INSERT INTO people (email, password) 
-//             // VALUES (${email}, ${password})
-//             // RETURNING *;
-
-
-
-
-// // app.post('/delete', async (req, res) => {
-// //     const { id } = req.body;
-
-// //     if (!id) {
-// //         return res.status(400).json({ message: 'ID is required' });
-// //     }
-
-// //     try {
-// //         const result = await sql`
-// //           DELETE FROM all_items WHERE id = ${id};
-// //         `;
-// //         console.log('User added to database:', result[0]);
-// //         res.status(201).json({ message: 'User registered successfully' });
-// //     } catch (error) {
-// //         console.error('Error inserting data into database:', error);
-// //         res.status(500).json({ message: 'Registration failed', error: error });
-// //     }
-// // });
-
-// // app.post('/delete', async (req, res) => {
-// //     const { id } = req.body;
-// //     if (!id) {
-// //         return res.status(400).json({ message: 'ID is required' });
-// //     }
-
-// //     try {
-// //         const result = await sql`
-// //             DELETE FROM all_items WHERE id = ${id};
-// //         `;
-// //         if (result.affectedRows > 0) {
-// //             res.status(200).json({ message: 'Item deleted successfully' });
-// //         } else {
-// //             res.status(404).json({ message: 'ID not found' });
-// //         }
-// //     } catch (error) {
-// //         console.error('Error deleting data from database:', error);
-// //         res.status(500).json({ message: 'Error deleting item', error: error });
-// //     }
-// // });
 // app.post('/Delete', async (req, res) => {
 //     const { id } = req.body;
 //     if (!id) {
@@ -396,6 +350,30 @@ app.use(express.urlencoded({ extended: true }));
 const DATABASE_URL = 'postgresql://neondb_owner:npg_Hd5x6ZilDrwo@ep-cool-scene-a8fsiw9y-pooler.eastus2.azure.neon.tech/neondb?sslmode=require';
 const sql = neon(DATABASE_URL);
 
+// app.post('/People', async (req, res) => {
+//     const { email, password } = req.body;
+
+//     if (!email || !password) {
+//         return res.status(400).json({ message: 'Email and password are required' });
+//     }
+
+//     try {
+//         const salt = crypto.randomBytes(16).toString('hex');
+//         const hash = crypto.createHmac('sha256', salt).update(password).digest('hex');  
+
+//         const result = await sql`
+//             INSERT INTO people (email, password, salt) 
+//             VALUES (${email}, ${hash}, ${salt})
+//             RETURNING *;
+//         `;
+//         console.log('User added to database:', result[0]);
+//         res.status(201).json({ message: 'User registered successfully' });
+//     } catch (error) {
+//         console.error('Error inserting data into database:', error);
+//         res.status(500).json({ message: 'Registration failed', error: error });
+//     }
+// });
+
 app.post('/People', async (req, res) => {
     const { email, password } = req.body;
 
@@ -404,12 +382,9 @@ app.post('/People', async (req, res) => {
     }
 
     try {
-        const salt = crypto.randomBytes(16).toString('hex');
-        const hash = crypto.createHmac('sha256', salt).update(password).digest('hex');  
-
         const result = await sql`
-            INSERT INTO people (email, password, salt) 
-            VALUES (${email}, ${hash}, ${salt})
+            INSERT INTO people (email, password) 
+            VALUES (${email}, ${password})
             RETURNING *;
         `;
         console.log('User added to database:', result[0]);
@@ -419,6 +394,8 @@ app.post('/People', async (req, res) => {
         res.status(500).json({ message: 'Registration failed', error: error });
     }
 });
+
+
 
 
 app.post('/submitOrder', async (req, res) => {
@@ -494,17 +471,31 @@ app.get('/ShoesWomen', async (req, res) => {
     }
 });
 
+// app.get('/people', async (req, res) => {
+//     try {
+//         console.log('Fetching data from database...');
+//         const people = await sql`SELECT * FROM people`; 
+//         console.log('Data fetched:', people); 
+//         res.send(people); 
+//     } catch (error) {
+//         console.error('Database error:', error);
+//         res.status(500).send('Error fetching data from database');
+//     }
+// });
+
+
+
 app.get('/people', async (req, res) => {
     try {
-        console.log('Fetching data from database...');
-        const people = await sql`SELECT * FROM people`; 
-        console.log('Data fetched:', people); 
-        res.send(people); 
+      console.log('Fetching data from database...');
+      const people = await sql`SELECT * FROM people`; 
+      console.log('Data fetched:', people); 
+      res.send(people); 
     } catch (error) {
-        console.error('Database error:', error);
-        res.status(500).send('Error fetching data from database');
+      console.error('Database error:', error);
+      res.status(500).send('Error fetching data from database');
     }
-});
+  });
 
 app.get('/ShoesMen', async (req, res) => {
     try {
