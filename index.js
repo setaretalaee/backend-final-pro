@@ -420,6 +420,36 @@ app.post('/People', async (req, res) => {
     }
 });
 
+// app.post('/login', async (req, res) => {
+//     const { email, password } = req.body;
+
+//     if (!email || !password) {
+//         return res.status(400).json({ message: 'Email and password are required' });
+//     }
+
+//     try {
+//         const user = await sql`
+//             SELECT user_id, email, password, salt FROM people WHERE email = ${email};
+//         `;
+
+//         if (user.length === 0) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         const hash = crypto.createHmac('sha256', user[0].salt).update(password).digest('hex');
+
+//         if (hash !== user[0].password) {
+//             return res.status(401).json({ message: 'Incorrect password' });
+//         }
+
+//         res.status(200).json({ message: 'Login successful', userId: user[0].user_id });
+//     } catch (error) {
+//         console.error('Error during login:', error.message, error.stack);
+//         res.status(500).json({ message: 'Internal server error', error: error.message });
+//     }
+// });
+
+
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -428,15 +458,21 @@ app.post('/login', async (req, res) => {
     }
 
     try {
+        // بررسی داده‌ها
+        console.log('Email:', email);
+
         const user = await sql`
             SELECT user_id, email, password, salt FROM people WHERE email = ${email};
         `;
+
+        console.log('User from DB:', user);
 
         if (user.length === 0) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         const hash = crypto.createHmac('sha256', user[0].salt).update(password).digest('hex');
+        console.log('Generated hash:', hash);
 
         if (hash !== user[0].password) {
             return res.status(401).json({ message: 'Incorrect password' });
@@ -448,6 +484,8 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 });
+
+
 
 app.get('/hats', async (req, res) => {
     try {
