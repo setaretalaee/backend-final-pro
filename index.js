@@ -420,35 +420,30 @@ app.post('/People', async (req, res) => {
     }
 });
 
-// app.post('/login', async (req, res) => {
-//     const { email, password } = req.body;
 
-//     if (!email || !password) {
-//         return res.status(400).json({ message: 'Email and password are required' });
-//     }
+app.post('/submitOrder', async (req, res) => {
+    const { userId, productIds } = req.body;
 
-//     try {
-//         const user = await sql`
-//             SELECT user_id, email, password, salt FROM people WHERE email = ${email};
-//         `;
+    if (!userId || !Array.isArray(productIds) || productIds.length === 0) {
+        return res.status(400).json({ message: 'User ID and at least one product ID are required' });
+    }
 
-//         if (user.length === 0) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
+    try {
+        for (const productId of productIds) {
+            await sql`
+                INSERT INTO person_items (userId, productId)
+                VALUES (${userId}, ${productId});
+            `;
+        }
 
-//         const hash = crypto.createHmac('sha256', user[0].salt).update(password).digest('hex');
+        console.log('Order added to database:', { userId, productIds });
+        res.status(201).json({ message: 'Order added successfully' });
 
-//         if (hash !== user[0].password) {
-//             return res.status(401).json({ message: 'Incorrect password' });
-//         }
-
-//         res.status(200).json({ message: 'Login successful', userId: user[0].user_id });
-//     } catch (error) {
-//         console.error('Error during login:', error.message, error.stack);
-//         res.status(500).json({ message: 'Internal server error', error: error.message });
-//     }
-// });
-
+    } catch (error) {
+        console.error('Error inserting data into database:', error);
+        res.status(500).json({ message: 'Failed to add order', error: error.message });
+    }
+});
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -625,6 +620,10 @@ app.post('/adminDress', async (req, res) => {
         res.status(500).json({ message: 'Failed to add dress', error: error });
     }
 });
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
