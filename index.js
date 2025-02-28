@@ -8,7 +8,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173'], 
+    origin: ['http://localhost:3000', 'http://localhost:5173','https://your-production-domain.com'], 
     methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
     allowedHeaders: 'X-Requested-With, Content-Type',
     credentials: true
