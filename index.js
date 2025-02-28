@@ -380,7 +380,7 @@ const app = express();
 //     credentials: true
 // }));
 
-const cors = require('cors');
+// const cors = require('cors');
 
 app.use(cors({
     origin: ['http://localhost:3000', 'http://localhost:5173', 'https://trendify-react.onrender.com', 'https://your-production-domain.com'],
