@@ -459,25 +459,21 @@ app.post('/login', async (req, res) => {
 
     try {
         const user = await sql`
-            SELECT user_id, email, password, salt FROM people WHERE email = ${email};
+            SELECT user_id, email, password FROM people WHERE email = ${email};
         `;
-        console.log('User retrieved:', user);
 
         if (user.length === 0) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const hash = crypto.createHmac('sha256', user[0].salt).update(password).digest('hex');
-        console.log('Generated hash:', hash);
-
-        if (hash !== user[0].password) {
+        if (password !== user[0].password) {
             return res.status(401).json({ message: 'Incorrect password' });
         }
 
         res.status(200).json({ message: 'Login successful', userId: user[0].user_id });
     } catch (error) {
         console.error('Error during login:', error.message, error.stack);
-        res.status(500).json({ message: 'Internal server error', error: error.message });
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
