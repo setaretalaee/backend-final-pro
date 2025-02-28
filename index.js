@@ -346,15 +346,16 @@ app.post('/adminDress', async (req, res) => {
 
   
 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`My app listening at http://localhost:${port}`);
-});
+// const port = 3000;
+// app.listen(port, () => {
+//     console.log(`My app listening at http://localhost:${port}`);
+// });
 
 
 
 
-
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 
