@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');  
 const { neon } = require('@neondatabase/serverless');
-const bcrypt = require('bcrypt'); 
-
+// const bcrypt = require('bcrypt'); 
+  // "bcryptjs": "^3.0.2",
 
 const app = express();
 
